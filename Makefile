@@ -1,17 +1,7 @@
 CC		= gcc
-NAME	= libftprintf.a
-SRCS	= src/ft_printf.c \
-          src/print/print_string.c \
-          src/print/print_int.c \
-          src/print/print_unsigned.c \
-          src/utils/ft_putnbr_long_fd.c \
-          src/print/print_hex.c \
-          src/print/print_pointer.c \
-          src/apply/apply_procent.c \
-          src/parser/parse_procent.c \
-          src/print/print_char.c \
-          src/utils/parse_utils.c \
-          src/utils/struct_init.c \
+NAME	= pipex
+SRCS	= src/main_utils.c \
+          src/main.c
 
 OBJS		= $(SRCS:.c=.o)
 
@@ -21,14 +11,15 @@ LIBR	= ranlib
 RM		= rm -f
 INCL	= ./
 
+LIBFT	= libft/libft.a
+
 .c.o:
 	$(CC) $(FLAGS) -I includes -c $< -o $(<:.c=.o)
 
+
 $(NAME): 	$(OBJS)
 	make bonus -C libft
-	cp libft/libft.a ./$(NAME)
-	$(LIBC) $(NAME) $(OBJS)
-	$(LIBR) $(NAME)
+	$(CC) $(FLAGS) $(LIBFT) $(OBJS) -o $(NAME)
 
 all:	$(NAME)
 
