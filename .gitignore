@@ -3,3 +3,5 @@ CMakeLists.txt
 cmake-build-debug/
 libft/CMakeLists.txt
 shouldBeRemoved/
+infile
+outfile

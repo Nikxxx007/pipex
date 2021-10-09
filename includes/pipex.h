@@ -8,6 +8,9 @@
 # include <fcntl.h>
 
 void    er_prog_exit();
+int		get_paths(char **envp, char **command);
+char	*cmd_maker(char **paths, char *command);
+
 
 # include "libft.h"
 
