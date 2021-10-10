@@ -15,7 +15,12 @@ char *cmd_maker(char **paths, char *command)
 		binary = ft_strjoin(path_start, cmd[0]);
 		free(path_start);
 		if (!access(binary, F_OK))
+		{
+			ar_free(cmd);
 			return (binary);
+		}
+		else
+			free(binary);
 		i++;
 	}
 	return (0);
@@ -23,8 +28,9 @@ char *cmd_maker(char **paths, char *command)
 
 void command_ex1(char **path, int *fd, char **argv, char **envp)
 {
-	int file;
-	char **cmd;
+	int		file;
+	char	**cmd;
+	int 	pid;
 
 	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (file == -1)
@@ -33,24 +39,35 @@ void command_ex1(char **path, int *fd, char **argv, char **envp)
 	dup2(file, STDOUT_FILENO);
 	close(fd[1]);
 	cmd = ft_split(argv[3], ' ');
-	if (execve(path[1], cmd, envp) == -1)
-		er_prog_exit();
+	pid = fork();
+	if (pid == 0)
+		if (execve(path[1], cmd, envp) == -1)
+			er_prog_exit();
+	ar_free(cmd);
+	exit(1);
 }
 
 void command_ex(char **path, int *fd, char **argv, char **envp)
 {
 	int		file;
 	char	**cmd;
+	int		pid;
+	int		i;
 
-		file = open(argv[1], O_RDONLY, 0777);
-		if (file == -1)
-			er_prog_exit();
-		dup2(fd[1], STDOUT_FILENO);
-		dup2(file, STDIN_FILENO);
-		close (fd[0]);
-		cmd = ft_split(argv[2], ' ');
+	i = 0;
+	file = open(argv[1], O_RDONLY, 0777);
+	if (file == -1)
+		er_prog_exit();
+	dup2(fd[1], STDOUT_FILENO);
+	dup2(file, STDIN_FILENO);
+	close (fd[0]);
+	cmd = ft_split(argv[2], ' ');
+	pid = fork();
+	if (pid == 0)
 		if (execve(path[0], cmd, envp) == -1)
 			er_prog_exit();
+	ar_free(cmd);
+	exit(1);
 }
 
 void execution(int *fd, char **path, char **argv, char **envp)
@@ -65,7 +82,10 @@ void execution(int *fd, char **path, char **argv, char **envp)
 	if (pid == 0)
 		command_ex(path, fd, argv, envp);
 	waitpid(pid, NULL, 0);
-	command_ex1(path, fd, argv, envp); //TODO function for main process(correct in values)
+	pid = fork();
+	if (pid == 0)
+		command_ex1(path, fd, argv, envp);
+	waitpid(pid, NULL, 0);
 	close(fd[0]);
 	close(fd[1]);
 }
@@ -73,8 +93,9 @@ void execution(int *fd, char **path, char **argv, char **envp)
 int    main(int argc, char **argv, char **envp)
 {
 	int 	fd[2]; //fd[0] - read, [1] - write
-	char	*files[2]; //file[0] - in, [2] - out
+	char	**files; //file[0] - in, [2] - out
 
+	files = (char **)malloc(2 * sizeof(char *));
 	files[0] = argv[2];
 	files[1] = argv[3];
     if (argc != 5)
@@ -82,9 +103,7 @@ int    main(int argc, char **argv, char **envp)
     else
     {
 		if (!get_paths(envp, files))
-			er_prog_exit();//TODO free paths
+			er_prog_exit();
 		execution(fd, files, argv, envp);
 	}
-} // TODO check for leaks and free all splits
-// TODO find the way to stop both processes
-
+}
