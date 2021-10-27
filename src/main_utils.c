@@ -1,6 +1,6 @@
 #include "../includes/pipex.h"
 
-void    er_prog_exit()
+void	er_prog_exit(void)
 {
 	perror("Error: ");
 	exit(1);
@@ -16,7 +16,6 @@ int	get_paths(char **envp, char **command)
 	command[0] = cmd_maker(paths, command[0]);
 	command[1] = cmd_maker(paths, command[1]);
 	ar_free(paths);
-
 	if (command[0] && command[1])
 		return (1);
 	return (0);
@@ -24,7 +23,7 @@ int	get_paths(char **envp, char **command)
 
 void	ar_free(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])

@@ -1,6 +1,6 @@
 #include "../includes/pipex.h"
 
-char *cmd_maker(char **paths, char *command)
+char	*cmd_maker(char **paths, char *command)
 {
 	char	*path_start;
 	char	*binary;
@@ -26,7 +26,7 @@ char *cmd_maker(char **paths, char *command)
 	return (0);
 }
 
-void command_ex1(char **path, int *fd, char **argv, char **envp)
+void	command_ex1(char **path, int *fd, char **argv, char **envp)
 {
 	int		file;
 	char	**cmd;
@@ -47,7 +47,7 @@ void command_ex1(char **path, int *fd, char **argv, char **envp)
 	exit(1);
 }
 
-void command_ex(char **path, int *fd, char **argv, char **envp)
+void	command_ex(char **path, int *fd, char **argv, char **envp)
 {
 	int		file;
 	char	**cmd;
@@ -70,7 +70,7 @@ void command_ex(char **path, int *fd, char **argv, char **envp)
 	exit(1);
 }
 
-void execution(int *fd, char **path, char **argv, char **envp)
+void	execution(int *fd, char **path, char **argv, char **envp)
 {
 	pid_t pid;
 
@@ -90,7 +90,7 @@ void execution(int *fd, char **path, char **argv, char **envp)
 	close(fd[1]);
 }
 
-int    main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	int 	fd[2]; //fd[0] - read, [1] - write
 	char	**files; //file[0] - in, [2] - out
