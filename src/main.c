@@ -92,8 +92,8 @@ void	execution(int *fd, char **path, char **argv, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		fd[2]; //fd[0] - read, [1] - write
-	char	**files; //file[0] - in, [2] - out
+	int		fd[2];
+	char	**files;
 
 	files = (char **)malloc(2 * sizeof(char *));
 	files[0] = argv[2];
