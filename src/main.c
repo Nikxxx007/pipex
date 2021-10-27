@@ -4,7 +4,7 @@ char	*cmd_maker(char **paths, char *command)
 {
 	char	*path_start;
 	char	*binary;
-	char 	**cmd;
+	char	**cmd;
 	int		i;
 
 	i = 0;
@@ -30,7 +30,7 @@ void	command_ex1(char **path, int *fd, char **argv, char **envp)
 {
 	int		file;
 	char	**cmd;
-	int 	pid;
+	int		pid;
 
 	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (file == -1)
@@ -72,7 +72,7 @@ void	command_ex(char **path, int *fd, char **argv, char **envp)
 
 void	execution(int *fd, char **path, char **argv, char **envp)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	if (pipe(fd) == -1)
 		er_prog_exit();
@@ -92,16 +92,16 @@ void	execution(int *fd, char **path, char **argv, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int 	fd[2]; //fd[0] - read, [1] - write
+	int		fd[2]; //fd[0] - read, [1] - write
 	char	**files; //file[0] - in, [2] - out
 
 	files = (char **)malloc(2 * sizeof(char *));
 	files[0] = argv[2];
 	files[1] = argv[3];
-    if (argc != 5)
-        er_prog_exit();
-    else
-    {
+	if (argc != 5)
+		er_prog_exit();
+	else
+	{
 		if (!get_paths(envp, files))
 			er_prog_exit();
 		execution(fd, files, argv, envp);
