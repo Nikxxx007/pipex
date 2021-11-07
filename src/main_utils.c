@@ -3,7 +3,7 @@
 void	er_prog_exit(void)
 {
 	perror("Error: ");
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
 int	get_paths(char **envp, char **command)
