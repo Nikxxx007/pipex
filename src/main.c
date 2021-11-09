@@ -94,7 +94,15 @@ int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
 	char	**files;
+	int		i;
 
+	i = 1;
+	while (i < argc)
+	{
+		if (!(ft_strncmp(argv[i], "", 1)))
+			er_prog_exit();
+		i++;
+	}
 	files = (char **)malloc(2 * sizeof(char *));
 	files[0] = argv[2];
 	files[1] = argv[3];

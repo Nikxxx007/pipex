@@ -5,3 +5,4 @@ libft/CMakeLists.txt
 shouldBeRemoved/
 infile
 outfile
+.DS_Store

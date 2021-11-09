@@ -26,7 +26,7 @@ void	add_letters(char *string, int len, int pos, const char *source)
 	}
 }
 
-void 	add_words(char const *str, char symb, char **new_str)
+void	add_words(char const *str, char symb, char **new_str)
 {
 	size_t	c_i_j[3];
 
