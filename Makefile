@@ -1,7 +1,9 @@
 CC		= gcc
 NAME	= pipex
-SRCS	= src/main_utils.c \
-          src/main.c
+SRCS	= src/main.c \
+          				src/execution.c \
+          				src/get_next_line.c \
+          				src/util.c
 
 OBJS		= $(SRCS:.c=.o)
 

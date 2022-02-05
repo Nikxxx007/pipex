@@ -1,117 +1,80 @@
 #include "../includes/pipex.h"
 
-char	*cmd_maker(char **paths, char *command)
+void	print_mes(void)
 {
-	char	*path_start;
-	char	*binary;
-	char	**cmd;
-	int		i;
-
-	i = 0;
-	cmd = ft_split(command, ' ');
-	while (paths[i])
-	{
-		path_start = ft_strjoin(paths[i], "/");
-		binary = ft_strjoin(path_start, cmd[0]);
-		free(path_start);
-		if (!access(binary, F_OK))
-		{
-			ar_free(cmd);
-			return (binary);
-		}
-		else
-			free(binary);
-		i++;
-	}
-	return (0);
-}
-
-void	command_ex1(char **path, int *fd, char **argv, char **envp)
-{
-	int		file;
-	char	**cmd;
-	int		pid;
-
-	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (file == -1)
-		er_prog_exit();
-	dup2(fd[0], STDIN_FILENO);
-	dup2(file, STDOUT_FILENO);
-	close(fd[1]);
-	cmd = ft_split(argv[3], ' ');
-	pid = fork();
-	if (pid == 0)
-		if (execve(path[1], cmd, envp) == -1)
-			er_prog_exit();
-	ar_free(cmd);
+	ft_putstr_fd("Incorrect nember of values\n", 2);
+	ft_putstr_fd("Usage: ./pipex <file1> <cmd1> <file2>\n", 1);
 	exit(1);
 }
 
-void	command_ex(char **path, int *fd, char **argv, char **envp)
+int open_type(char *filename, int type)
 {
-	int		file;
-	char	**cmd;
-	int		pid;
-	int		i;
+	int	ret;
 
-	i = 0;
-	file = open(argv[1], O_RDONLY, 0777);
-	if (file == -1)
+	ret = 0;
+	if (type == 0)
+		ret = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	else if (type == 1)
+		ret = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	else if (type == 2)
+		ret = open(filename, O_RDONLY, 0777);
+	if (ret == -1)
 		er_prog_exit();
-	dup2(fd[1], STDOUT_FILENO);
-	dup2(file, STDIN_FILENO);
-	close (fd[0]);
-	cmd = ft_split(argv[2], ' ');
-	pid = fork();
-	if (pid == 0)
-		if (execve(path[0], cmd, envp) == -1)
-			er_prog_exit();
-	ar_free(cmd);
-	exit(1);
+	return (ret);
 }
 
-void	execution(int *fd, char **path, char **argv, char **envp)
+void	here_doc(char *lim, int argc)
 {
 	pid_t	pid;
+	int		fd[2];
+	char 	*line;
 
+	if (argc < 6)
+		print_mes();
 	if (pipe(fd) == -1)
 		er_prog_exit();
 	pid = fork();
-	if (pid == -1)
-		er_prog_exit();
 	if (pid == 0)
-		command_ex(path, fd, argv, envp);
-	waitpid(pid, NULL, 0);
-	pid = fork();
-	if (pid == 0)
-		command_ex1(path, fd, argv, envp);
-	waitpid(pid, NULL, 0);
-	close(fd[0]);
-	close(fd[1]);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	int		fd[2];
-	char	**files;
-	int		i;
-
-	i = 1;
-	while (i < argc)
 	{
-		if (!(ft_strncmp(argv[i], "", 1)))
-			er_prog_exit();
-		i++;
+		close(fd[0]);
+		while (get_next_line(0, &line))
+		{
+			if (!(ft_strncmp(line, lim, ft_strlen(lim))))
+				exit(0);
+			write(fd[1], line, ft_strlen(line));
+		}
 	}
-	files = (char **)malloc(2 * sizeof(char *));
-	files[0] = argv[2];
-	files[1] = argv[3];
-	if (argc != 5)
-		er_prog_exit();
 	else
 	{
-		if (!get_paths(envp, files))
-			er_prog_exit();
-		execution(fd, files, argv, envp);
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		wait(NULL);
 	}
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	int	i;
+	int	infile;
+	int outfile;
+
+	if (argc != 5)
+		print_mes();
+	if (!(ft_strncmp(argv[1], "here_doc", 8)))
+	{
+		i = 3;
+		outfile = open_type(argv[argc - 1], 0);
+		here_doc(argv[2], argc);
+	}
+	else
+	{
+		i = 2;
+		outfile = open_type(argv[argc - 1], 1);
+		infile = open_type(argv[1], 2);
+		dup2(infile, STDIN_FILENO);
+	}
+	while (i < argc - 2)
+		execution(argv[i++], envp);
+	dup2(outfile, STDOUT_FILENO);
+	cmd_ex(argv[argc - 2], envp);
 }
