@@ -63,10 +63,12 @@ $(NAME): 	$(OBJS)
 	$(LIBC) $(NAME) $(OBJS)
 	$(LIBR) $(NAME)
 
-all:	$(NAME)
+all:	$(NAME) bonus
+
 bonus:	$(NAME) $(OBJS_BONUS)
 	$(LIBC) $(NAME) $(OBJS) $(OBJS_BONUS)
 	$(LIBR) $(NAME)
+
 clean:
 		$(RM) $(OBJS) $(OBJS_BONUS)
 fclean:	clean

@@ -5,6 +5,13 @@ SRCS	= src/main_utils.c \
 
 OBJS		= $(SRCS:.c=.o)
 
+SRCS_BONUS	= src_bonus/main_bonus.c \
+				src_bonus/execution_bonus.c \
+				src_bonus/get_next_line_bonus.c \
+				src_bonus/util_bonus.c
+
+OBJS_BONUS	= $(SRCS_BONUS:.c=.o)
+
 FLAGS	= -Wall -Wextra -Werror
 LIBC	= ar rc
 LIBR	= ranlib
@@ -21,13 +28,20 @@ $(NAME): 	$(OBJS)
 	make bonus -C libft
 	$(CC) $(FLAGS) $(LIBFT) $(OBJS) -o $(NAME)
 
-all:	$(NAME)
+all:	$(NAME) bonus
+
+bonus:	$(NAME) $(OBJS_BONUS)
+	make bonus -C libft
+	$(CC) $(FLAGS) $(LIBFT) $(OBJS) -o $(NAME)
+	$(CC) $(FLAGS) $(LIBFT) $(OBJS_BONUS) -o pipex_bonus
 
 clean:
-		$(RM) $(OBJS)
+		$(RM) $(OBJS) $(OBJS_BONUS)
 		make clean -C libft
+
 fclean:	clean
 		$(RM) $(NAME)
+		$(RM) pipex_bonus
 		make fclean -C libft
 
 re:		fclean all
