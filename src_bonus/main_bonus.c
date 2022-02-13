@@ -1,14 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rogaynel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 15:48:58 by rogaynel          #+#    #+#             */
+/*   Updated: 2022/02/13 16:23:50 by rogaynel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex_bonus.h"
 
 void	print_mes_b(void)
 {
 	ft_putstr_fd("Incorrect nember of values\n", 2);
 	ft_putstr_fd("Usage: ./pipex_bonus <file1> <cmd1> <...> <file2>\n", 1);
-	ft_putstr_fd("Usage: ./pipex_bonus here_doc <LIMITER> <cmd> <cmd1> <...> <file>\n", 1);
+	ft_putstr_fd("Usage: ./pipex_bonus here_doc \
+			<LIMITER> <cmd> <cmd1> <...> <file>\n", 1);
 	exit(1);
 }
 
-int open_type(char *filename, int type)
+int	open_type(char *filename, int type)
 {
 	int	ret;
 
@@ -28,7 +41,7 @@ void	here_doc(char *lim, int argc)
 {
 	pid_t	pid;
 	int		fd[2];
-	char 	*line;
+	char	*line;
 
 	if (argc < 6)
 		print_mes_b();
@@ -53,11 +66,11 @@ void	here_doc(char *lim, int argc)
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	int	i;
 	int	infile;
-	int outfile;
+	int	outfile;
 
 	if (argc < 5)
 		print_mes_b();

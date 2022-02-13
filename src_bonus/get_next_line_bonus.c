@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rogaynel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 17:55:54 by rogaynel          #+#    #+#             */
+/*   Updated: 2022/02/13 17:55:58 by rogaynel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex_bonus.h"
 
 int	gnl_verify_line(char **stack, char **line)
@@ -23,7 +35,8 @@ int	gnl_read_file(int fd, char *heap, char **stack, char **line)
 	int				ret;
 	char			*tmp_stack;
 
-	while ((ret = read(fd, heap, BUFF_SIZE)) > 0)
+	ret = read(fd, heap, BUFF_SIZE);
+	while (ret > 0)
 	{
 		heap[ret] = '\0';
 		if (*stack)
@@ -37,6 +50,7 @@ int	gnl_read_file(int fd, char *heap, char **stack, char **line)
 			*stack = ft_strdup(heap);
 		if (gnl_verify_line(stack, line))
 			break ;
+		ret = read(fd, heap, BUFF_SIZE);
 	}
 	return (ret);
 }
@@ -48,8 +62,8 @@ int	get_next_line(int const fd, char **line)
 	int				ret;
 	int				i;
 
-	if (!line || (fd < 0 || fd >= 64000) || (read(fd, stack[fd], 0) < 0) \
-		|| !(heap = (char *)malloc(sizeof(char) * BUFF_SIZE + 1)))
+	heap = (char *)malloc(sizeof(char) * BUFF_SIZE + 1);
+	if (!line || (read(fd, stack[fd], 0) < 0) || !(heap))
 		return (-1);
 	if (stack[fd])
 		if (gnl_verify_line(&stack[fd], line))

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rogaynel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 15:35:15 by rogaynel          #+#    #+#             */
+/*   Updated: 2022/02/13 16:25:21 by rogaynel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
 char	*find_path(char *cmd, char **envp)
@@ -36,7 +48,7 @@ void	cmd_ex(char *argv, char **envp)
 void	execution(char *argv, char **envp)
 {
 	pid_t	pid;
-	int 	fd[2];
+	int		fd[2];
 
 	if (pipe(fd) == -1)
 		er_prog_exit();

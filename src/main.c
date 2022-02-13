@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rogaynel <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 15:42:26 by rogaynel          #+#    #+#             */
+/*   Updated: 2022/02/13 16:24:36 by rogaynel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
 void	print_mes(void)
 {
 	ft_putstr_fd("Incorrect nember of values\n", 2);
-	ft_putstr_fd("Usage: ./pipex <file1> <cmd1> <file2>\n", 1);
+	ft_putstr_fd("Usage: ./pipex <file1> \
+			<cmd1> <file2>\n", 1);
 	exit(1);
 }
 
-int open_type(char *filename, int type)
+int	open_type(char *filename, int type)
 {
 	int	ret;
 
@@ -27,7 +40,7 @@ void	here_doc(char *lim, int argc)
 {
 	pid_t	pid;
 	int		fd[2];
-	char 	*line;
+	char	*line;
 
 	if (argc < 6)
 		print_mes();
@@ -52,11 +65,11 @@ void	here_doc(char *lim, int argc)
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	int	i;
 	int	infile;
-	int outfile;
+	int	outfile;
 
 	if (argc != 5)
 		print_mes();
